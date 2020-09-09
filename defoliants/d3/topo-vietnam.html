@@ -3,58 +3,120 @@
 	
 	<meta charset="utf-8">
 	<style>
-		.VN\.GL { fill: #9e1d1d; }
+		.odometer {
+			font-size: 30px;
+		}
+
+		.VN\.GL { fill: #3A2E39 }
+
+		.VN\.GL.orange { fill: none;
+							 stroke: #EE6702;
+							 stroke-width: 2}
+
+		.VN\.GL.blue { fill: none;
+							 stroke: #01BAEF;
+							 stroke-width: 2}
+
+		.VN\.GL.white { fill: none;
+							 stroke: #FBFEF9;
+							 stroke-width: 2}
 	</style>
 	<body>
+	<div>
+		<p>Gallons Used: </p>
+		<div id="gallons" class="odometer">0,000</div>
+	</div>
+	<div>
+		<p>Acres Sprayed: </p>
+		<div id="acres" class="odometer">0,000</div>
+	</div>
+	</body>
+	<link rel="stylesheet" href="css/odometer-theme-train-station.css" />
+	<script src="http://github.hubspot.com/odometer/odometer.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
 	<script src="http://d3js.org/topojson.v3.min.js"></script>
 	<script>
-		const width = 960,
-			  height = 960;
+		window.odometerOptions = {
+			format: '(d,ddd)', // Change how digit groups are formatted, and how many digits are shown after the decimal point
+			duration: 10000, // Change how long the javascript expects the CSS animation to take
+		};
 
-		let create_svg = svg => d3.select("body").append("svg")
+		const width = 960,
+			  height = 480;
+
+		let createSVG = svg => d3.select("body").append("svg")
 								  .attr("width", width)
 								  .attr("height", height);
 
-		let create_projection = (scale, translation) => d3.geoMercator()
-														  .scale(scale)
-														  .translate(translation);
+		let createProjection = (features) => d3.geoMercator()
+														  .fitExtent(
+															  [
+																  [20, 20],
+																  [width, height]
+															  ],
+															  features
+														  );
 
-		let create_path = projection => d3.geoPath()
+		let createPath = projection => d3.geoPath()
 										  .projection(projection);
 
-		var gia_lai_svg = create_svg();
-		var gia_lai_projection = create_projection(2250, [-3700,1000]);
-		var gia_lai_path = create_path(gia_lai_projection);
+		var giaLaiSVG = createSVG();
 
         d3.json("json/gia_lai.json")
             .then((data) => {
+				var giaLaiProjection = createProjection(data);
+				var giaLaiPath = createPath(giaLaiProjection);
+
                 //Bind data and create one path per GeoJSON feature
-				gia_lai_svg.selectAll("path")
+				giaLaiSVG.selectAll("path")
 				   .data(data.features)
 				   .enter()
 				   .append("path")
 				   .attr("class", function(d) {return d.properties.HASC_1})
-				   .attr("d", gia_lai_path);
+				   .attr("d", giaLaiPath);
+
+				var flightPath = giaLaiSVG.append("path")
+									  .attr("d", giaLaiPath(data.features[0]))
+									  .attr("class", "VN.GL blue");
+				
+				var totalLength = flightPath.node().getTotalLength();
+				console.log(totalLength)
+
+				flightPath.attr("stroke-dasharray", totalLength + " " + totalLength)
+						  .attr("stroke-dashoffset", totalLength)
+						  .transition()
+							.duration(5000)
+							.ease(d3.easeLinear)
+							.attr("stroke-dashoffset", 0);
+
+				setTimeout(function(){
+    				gallons.innerHTML = data.features[0].properties.gallons;
+				}, 1000);
+
+				setTimeout(function(){
+    				acres.innerHTML = data.features[0].properties.acres;
+				}, 1000);
+
             })
             .catch((error) => {
                 console.error("Error loading the data:");
                 console.error(error);
             });
 
-		var vietnam_svg = create_svg();
-		var vietnam_projection = create_projection(2250, [-3700,1000]);
-		var vietnam_path = create_path(vietnam_projection);
+		var vietnamSVG = createSVG();
 
         d3.json("json/vietnam.json")
             .then((data) => {
+				var vietnamProjection = createProjection(data);
+				var vietnamPath = createPath(vietnamProjection);
+
                 //Bind data and create one path per GeoJSON feature
-				vietnam_svg.selectAll("path")
+				vietnamSVG.selectAll("path")
 				   .data(data.features)
 				   .enter()
 				   .append("path")
 				   .attr("class", function(d) {return d.properties.HASC_1})
-				   .attr("d", vietnam_path);
+				   .attr("d", vietnamPath);
             })
             .catch((error) => {
                 console.error("Error loading the data:");
