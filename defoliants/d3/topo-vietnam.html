@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+	<head>
+	
+	<meta charset="utf-8">
+	<style>
+		.VN\.GL { fill: #9e1d1d; }
+	</style>
+	<body>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+	<script src="http://d3js.org/topojson.v3.min.js"></script>
+	<script>
+		const width = 960,
+			  height = 960;
+
+		let create_svg = svg => d3.select("body").append("svg")
+								  .attr("width", width)
+								  .attr("height", height);
+
+		let create_projection = (scale, translation) => d3.geoMercator()
+														  .scale(scale)
+														  .translate(translation);
+
+		let create_path = projection => d3.geoPath()
+										  .projection(projection);
+
+		var gia_lai_svg = create_svg();
+		var gia_lai_projection = create_projection(2250, [-3700,1000]);
+		var gia_lai_path = create_path(gia_lai_projection);
+
+        d3.json("json/gia_lai.json")
+            .then((data) => {
+                //Bind data and create one path per GeoJSON feature
+				gia_lai_svg.selectAll("path")
+				   .data(data.features)
+				   .enter()
+				   .append("path")
+				   .attr("class", function(d) {return d.properties.HASC_1})
+				   .attr("d", gia_lai_path);
+            })
+            .catch((error) => {
+                console.error("Error loading the data:");
+                console.error(error);
+            });
+
+		var vietnam_svg = create_svg();
+		var vietnam_projection = create_projection(2250, [-3700,1000]);
+		var vietnam_path = create_path(vietnam_projection);
+
+        d3.json("json/vietnam.json")
+            .then((data) => {
+                //Bind data and create one path per GeoJSON feature
+				vietnam_svg.selectAll("path")
+				   .data(data.features)
+				   .enter()
+				   .append("path")
+				   .attr("class", function(d) {return d.properties.HASC_1})
+				   .attr("d", vietnam_path);
+            })
+            .catch((error) => {
+                console.error("Error loading the data:");
+                console.error(error);
+            });
+
+	</script>
+</html>
