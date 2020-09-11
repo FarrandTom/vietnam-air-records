@@ -3,50 +3,151 @@
 	
 	<meta charset="utf-8">
 	<style>
+		@media screen and (min-width: 75em) {
+		html {
+			font-size: 1vw;
+			}
+		}
+
 		.odometer {
 			font-size: 30px;
 		}
 
-		.VN\.GL { fill: #3A2E39 }
+		.VN\.GL { fill: #4B5320 }
 
-		.VN\.GL.orange { fill: none;
-							 stroke: #EE6702;
-							 stroke-width: 2}
+		.VN\.GL.O { fill: none;
+					stroke: #EE6702;
+					stroke-width: 2}
 
-		.VN\.GL.blue { fill: none;
-							 stroke: #01BAEF;
-							 stroke-width: 2}
+		.VN\.GL.B { fill: none;
+					stroke: #01BAEF;
+					stroke-width: 2}
 
-		.VN\.GL.white { fill: none;
-							 stroke: #FBFEF9;
-							 stroke-width: 2}
+		.VN\.GL.W { fill: none;
+					stroke: #FBFEF9;
+					stroke-width: 2}
+		
+		.article { background-color: #3A2E39; }
+
+		body { margin: 0; }
+
+		h1 { font-family: Courier New; 
+			 color: #FBFEF9;
+			 font-size: 5rem;
+			 padding: 1rem 1rem; }
+		
+		h3 { font-family: Courier New; 
+			 color: #FBFEF9;
+			 font-size: 1.3rem;
+			 margin-bottom: 0rem;
+			 margin-top: 0rem;}
+
+	    p { font-family: Courier New; 
+			color: #FBFEF9;
+			padding: 0rem 1rem; }
+
+		.svg-container {
+			display: inline-block;
+			position: relative;
+			width: 100%;
+			padding-bottom: 100%;
+			vertical-align: top;
+			overflow: hidden; }
+
+		.svg-content {
+			position: absolute;
+			top: 0;
+			left: 0; }
+
+		.odometer-container {
+			background-color: #4B5320;
+			text-align: center;
+			padding: 1rem 0rem;}
+
+		.odometer-footer {
+			overflow: hidden;
+			position: fixed; /* Set the navbar to fixed position */
+			bottom: 0; /* Position the navbar at the top of the page */
+			width: 50%; /* Full width */}
+
 	</style>
 	<body>
 	<div>
-		<p>Gallons Used: </p>
-		<div id="gallons" class="odometer">0,000</div>
-	</div>
-	<div>
-		<p>Acres Sprayed: </p>
-		<div id="acres" class="odometer">0,000</div>
+		<r-grid columns=2>
+			<r-cell>
+				<div id="svg" class="svg-container"></div>
+				<r-grid columns=3 class="odometer-footer">
+					<r-cell>
+						<div class="odometer-container">
+							<h3>Gallons Used: </h3>
+							<div id="gallons" class="odometer">0</div>
+						</div>
+					</r-cell>
+					<r-cell>
+						<div class="odometer-container">
+							<h3>Acres Sprayed: </h3>
+							<div id="acres" class="odometer">0</div>
+						</div>
+					</r-cell>
+					<r-cell>
+						<div class="odometer-container">
+							<h3>Barrels Consumed: </h3>
+							<div id="barrels" class="odometer">0</div>
+						</div>
+					</r-cell>
+				</r-grid>
+			</r-cell>
+			<r-cell class="article">
+				<div>
+					<h1>DATA + DEFOLIANTS</h1>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius tincidunt fringilla. 
+						Donec tincidunt mollis nibh nec iaculis. Duis scelerisque viverra sem nec ullamcorper. 
+						Nunc semper ante nulla, in fringilla nisl fermentum non. Maecenas nisi diam, consectetur a 
+						consequat nec, aliquet nec mauris. Nam efficitur elementum euismod. 
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius tincidunt fringilla. 
+						Donec tincidunt mollis nibh nec iaculis. Duis scelerisque viverra sem nec ullamcorper. 
+						Nunc semper ante nulla, in fringilla nisl fermentum non. Maecenas nisi diam, consectetur a 
+						consequat nec, aliquet nec mauris. Nam efficitur elementum euismod. 
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius tincidunt fringilla. 
+						Donec tincidunt mollis nibh nec iaculis. Duis scelerisque viverra sem nec ullamcorper. 
+						Nunc semper ante nulla, in fringilla nisl fermentum non. Maecenas nisi diam, consectetur a 
+						consequat nec, aliquet nec mauris. Nam efficitur elementum euismod. 
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius tincidunt fringilla. 
+						Donec tincidunt mollis nibh nec iaculis. Duis scelerisque viverra sem nec ullamcorper. 
+						Nunc semper ante nulla, in fringilla nisl fermentum non. Maecenas nisi diam, consectetur a 
+						consequat nec, aliquet nec mauris. Nam efficitur elementum euismod. 
+					</p>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis varius tincidunt fringilla. 
+						Donec tincidunt mollis nibh nec iaculis. Duis scelerisque viverra sem nec ullamcorper. 
+						Nunc semper ante nulla, in fringilla nisl fermentum non. Maecenas nisi diam, consectetur a 
+						consequat nec, aliquet nec mauris. Nam efficitur elementum euismod. 
+					</p>
+				</div>
+			</r-cell>
+		</r-grid>
 	</div>
 	</body>
 	<link rel="stylesheet" href="css/odometer-theme-train-station.css" />
+	<link rel="stylesheet" href="css/raster.grid.css" />
 	<script src="http://github.hubspot.com/odometer/odometer.js"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
 	<script src="http://d3js.org/topojson.v3.min.js"></script>
 	<script>
-		window.odometerOptions = {
-			format: '(d,ddd)', // Change how digit groups are formatted, and how many digits are shown after the decimal point
-			duration: 10000, // Change how long the javascript expects the CSS animation to take
-		};
-
 		const width = 960,
-			  height = 480;
+			  height = 900;
 
-		let createSVG = svg => d3.select("body").append("svg")
-								  .attr("width", width)
-								  .attr("height", height);
+		let createSVG = svg => d3.select("div#svg").append("svg")
+								 .attr("preserveAspectRatio", "xMinYMin meet")
+								 .attr("viewBox", "0 0 960 900")
+								 .classed("svg-content", true);
 
 		let createProjection = (features) => d3.geoMercator()
 														  .fitExtent(
@@ -60,41 +161,66 @@
 		let createPath = projection => d3.geoPath()
 										  .projection(projection);
 
-		var giaLaiSVG = createSVG();
+		const giaLaiSVG = createSVG();
 
         d3.json("json/gia_lai.json")
             .then((data) => {
-				var giaLaiProjection = createProjection(data);
-				var giaLaiPath = createPath(giaLaiProjection);
+				const map = data[0]
+				const flights = data[1]
+
+				let giaLaiProjection = createProjection(map);
+				let giaLaiPath = createPath(giaLaiProjection);
 
                 //Bind data and create one path per GeoJSON feature
 				giaLaiSVG.selectAll("path")
-				   .data(data.features)
+				   .data(map.features)
 				   .enter()
 				   .append("path")
-				   .attr("class", function(d) {return d.properties.HASC_1})
+				   .attr("class", (d) => {return d.properties.HASC_1})
 				   .attr("d", giaLaiPath);
 
-				var flightPath = giaLaiSVG.append("path")
-									  .attr("d", giaLaiPath(data.features[0]))
-									  .attr("class", "VN.GL blue");
+				let flightPaths = giaLaiSVG.selectAll("flights")
+						.data(flights.features)
+						.enter()
+						.append("path")
+						.attr("id", (d, i) => {return "flight" + i;})
+						.attr("d", (d) => {return giaLaiPath(d);})
+						.attr("class", (d) => {return "flight VN.GL " + d.properties.agent;})
 				
-				var totalLength = flightPath.node().getTotalLength();
-				console.log(totalLength)
-
-				flightPath.attr("stroke-dasharray", totalLength + " " + totalLength)
+				d3.selectAll(".flight").each((d, i) => {
+					let totalLength = d3.select("#flight" + i).node().getTotalLength();
+					
+					flightPaths.attr("stroke-dasharray", totalLength + " " + totalLength)
 						  .attr("stroke-dashoffset", totalLength)
 						  .transition()
 							.duration(5000)
 							.ease(d3.easeLinear)
 							.attr("stroke-dashoffset", 0);
-
+				});
+				
 				setTimeout(function(){
-    				gallons.innerHTML = data.features[0].properties.gallons;
-				}, 1000);
+					let total_gallons = 0;
+					let total_acres = 0;
 
-				setTimeout(function(){
-    				acres.innerHTML = data.features[0].properties.acres;
+					flights.features.forEach((item) => {
+						gallons = item.properties.gallons;
+						total_gallons += gallons;
+
+						acres = item.properties.acres;
+						total_acres += acres;
+					});
+
+					d3.select("#gallons")
+					   .html(total_gallons);
+
+					d3.select("#acres")
+					   .html(total_acres);
+
+					// Assuming 55 gallons in a barrel
+					let total_barrels = Math.floor(total_gallons / 55);
+					d3.select("#barrels")
+					   .html(total_barrels);
+
 				}, 1000);
 
             })
@@ -102,26 +228,5 @@
                 console.error("Error loading the data:");
                 console.error(error);
             });
-
-		var vietnamSVG = createSVG();
-
-        d3.json("json/vietnam.json")
-            .then((data) => {
-				var vietnamProjection = createProjection(data);
-				var vietnamPath = createPath(vietnamProjection);
-
-                //Bind data and create one path per GeoJSON feature
-				vietnamSVG.selectAll("path")
-				   .data(data.features)
-				   .enter()
-				   .append("path")
-				   .attr("class", function(d) {return d.properties.HASC_1})
-				   .attr("d", vietnamPath);
-            })
-            .catch((error) => {
-                console.error("Error loading the data:");
-                console.error(error);
-            });
-
 	</script>
 </html>
