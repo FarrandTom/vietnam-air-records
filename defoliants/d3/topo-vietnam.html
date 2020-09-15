@@ -17,15 +17,15 @@
 
 		.VN\.GL.O { fill: none;
 					stroke: #EE6702;
-					stroke-width: 2}
+					stroke-width: 0.3}
 
 		.VN\.GL.B { fill: none;
 					stroke: #01BAEF;
-					stroke-width: 2}
+					stroke-width: 0.3}
 
 		.VN\.GL.W { fill: none;
 					stroke: #FBFEF9;
-					stroke-width: 2}
+					stroke-width: 0.3}
 		
 		.article { background-color: #3A2E39; }
 
@@ -75,6 +75,10 @@
 			stroke: #FBFEF9;
 			stroke-dasharray: 2,2;
 			stroke-linejoin: round;}
+
+		.background {
+            fill: none;
+            pointer-events: all;}
 
 	</style>
 	<body>
@@ -275,7 +279,7 @@
 					const [[x0, y0], [x1, y1]] = path.bounds(d);
 					event.stopPropagation();
 					provinces.transition().style("fill", null);
-					d3.select(this).transition().style("fill", "#EE6702");
+					// d3.select(this).transition().style("fill", "#EE6702");
 					svg.transition().duration(750).call(
 					zoom.transform,
 					d3.zoomIdentity
@@ -302,27 +306,44 @@
 				let projection = createProjection(map);
 				let path = createPath(projection);
 
+				svg.append('rect')
+				   .attr('class', 'background')
+				   .attr('height', height)
+				   .attr('width', width)
+				   .on('click', reset);
+
 				const g = svg.append("g");
 
                 //Bind data and create one path per GeoJSON feature
 				const provinces = g.append("g")
-				.attr("cursor", "pointer")
-				.selectAll("path")
-				   			 .data(map.features)
-							 .join("path")
-							 .attr("class", (d) => {return "province-boundary " + d.properties.HASC_1})
-      						 .on("click", clicked)
-      						 .attr("d", path);
+								   .attr("cursor", "pointer")
+							       .selectAll("path")
+				   			       .data(map.features)
+							       .join("path")
+							       .attr("class", (d) => {return "province-boundary " + d.properties.HASC_1})
+      						       .on("click", clicked)
+      						       .attr("d", path);
 
-				svg.call(zoom);
+				const flightPaths = g.append("g")
+									 .attr("cursor", "pointer")
+									 .selectAll("path")
+									 .data(flights.features)
+									 .join("path")
+									 .attr("id", (d, i) => {return "flight" + i;})
+									 .attr("d", (d) => {return path(d);})
+									 .attr("class", (d) => {return "flight VN.GL " + d.properties.agent;})
+									 .on("click", clicked)
+									 .attr("d", path);
 
-				// let flightPaths = giaLaiSVG.selectAll("flights")
+				// const flightPaths = svg.selectAll("flights")
 				// 		.data(flights.features)
 				// 		.enter()
 				// 		.append("path")
 				// 		.attr("id", (d, i) => {return "flight" + i;})
-				// 		.attr("d", (d) => {return giaLaiPath(d);})
-				// 		.attr("class", (d) => {return "flight VN.GL " + d.properties.agent;})
+				// 		.attr("d", (d) => {return path(d);})
+				// 		.attr("class", (d) => {return "flight VN.GL " + d.properties.agent;});
+
+				svg.call(zoom);
 				
 				// d3.selectAll(".flight").each((d, i) => {
 				// 	let totalLength = d3.select("#flight" + i).node().getTotalLength();
