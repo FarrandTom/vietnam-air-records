@@ -15,8 +15,9 @@
 
 		.flight-fade {
 			fill: none;
-			stroke: #3A2E39;
+			stroke: #725A70;
 			stroke-width: 0.3;
+			opacity: 0.3;
 		}
 
 		.VN\.GL { fill: #4B5320 }
@@ -250,12 +251,6 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
 	<script src="http://d3js.org/topojson.v3.min.js"></script>
 	<script>
-		d3.selection.prototype.moveToFront = function() {
-				return this.each(function(){
-				this.parentNode.appendChild(this);
-			});
-		};
-
 		const width = 480,
 			  height = 480;
 
@@ -294,18 +289,22 @@
 
 				function clicked(event, d) {
 					const [[x0, y0], [x1, y1]] = path.bounds(d);
-					const flightName = d3.select(this).attr("id");
+					const selection = d3.select(this);
+					const flightName = selection.attr("id");
 
-					d3.selectAll(".flight").attr("class", (d, i) => {
-						if (flightName !== flightIds[i]) {
-							// console.log(flightIds[i]);
-							d3.select(this).moveToFront()
-										   .style("stroke-width", 0.5);
-							return "flight flight-fade";
-						} else {
-							return "flight VN.GL " + d.properties.agent;
-						};
-					});
+					d3.selectAll(".flight").attr("class", "flight flight-fade");
+					selection.attr("class", "flight VN.GL " + d.properties.agent);
+					selection.raise();
+					
+					// d3.selectAll(".flight").attr("class", (d, i) => {
+					// 	if (flightName === flightIds[i]) {
+					// 		// console.log(flightIds[i]);
+					// 		console.log("True")
+					// 		return "flight VN.GL " + d.properties.agent;
+					// 	} else {
+					// 		return "flight flight-fade";
+					// 	};
+					// });
 
 					event.stopPropagation();
 					// d3.select(this).transition().style("fill", "#EE6702");
@@ -351,12 +350,12 @@
 
                 //Bind data and create one path per GeoJSON feature
 				const provinces = g.append("g")
-								   .attr("cursor", "pointer")
+								//    .attr("cursor", "pointer")
 							       .selectAll("path")
 				   			       .data(map.features)
 							       .join("path")
 							       .attr("class", (d) => {return "province-boundary " + d.properties.HASC_1})
-      						       .on("click", clicked)
+      						    //    .on("click", clicked)
       						       .attr("d", path);
 
 				const flightPaths = g.append("g")
