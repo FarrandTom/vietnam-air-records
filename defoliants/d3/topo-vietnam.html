@@ -13,19 +13,28 @@
 			font-size: 30px;
 		}
 
+		.flight-fade {
+			fill: none;
+			stroke: #3A2E39;
+			stroke-width: 0.3;
+		}
+
 		.VN\.GL { fill: #4B5320 }
 
 		.VN\.GL.O { fill: none;
 					stroke: #EE6702;
-					stroke-width: 0.3}
+					stroke-width: 0.3;
+					}
 
 		.VN\.GL.B { fill: none;
 					stroke: #01BAEF;
-					stroke-width: 0.3}
+					stroke-width: 0.3;
+					}
 
 		.VN\.GL.W { fill: none;
 					stroke: #FBFEF9;
-					stroke-width: 0.3}
+					stroke-width: 0.3;
+					}
 		
 		.article { background-color: #3A2E39; }
 
@@ -241,6 +250,12 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
 	<script src="http://d3js.org/topojson.v3.min.js"></script>
 	<script>
+		d3.selection.prototype.moveToFront = function() {
+				return this.each(function(){
+				this.parentNode.appendChild(this);
+			});
+		};
+
 		const width = 480,
 			  height = 480;
 
@@ -267,8 +282,10 @@
             .then((data) => {
 
 				function reset() {
-					provinces.transition().style("fill", null);
-					svg.transition().duration(750).call(
+					d3.selectAll(".flight").attr("class", (d, i) => {
+						return "flight VN.GL " + d.properties.agent;
+					});
+					svg.transition().duration(750).call(	
 					zoom.transform,
 					d3.zoomIdentity,
 					d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
@@ -277,8 +294,20 @@
 
 				function clicked(event, d) {
 					const [[x0, y0], [x1, y1]] = path.bounds(d);
+					const flightName = d3.select(this).attr("id");
+
+					d3.selectAll(".flight").attr("class", (d, i) => {
+						if (flightName !== flightIds[i]) {
+							// console.log(flightIds[i]);
+							d3.select(this).moveToFront()
+										   .style("stroke-width", 0.5);
+							return "flight flight-fade";
+						} else {
+							return "flight VN.GL " + d.properties.agent;
+						};
+					});
+
 					event.stopPropagation();
-					provinces.transition().style("fill", null);
 					// d3.select(this).transition().style("fill", "#EE6702");
 					svg.transition().duration(750).call(
 					zoom.transform,
@@ -302,6 +331,12 @@
 
 				const map = data[0]
 				const flights = data[1]
+
+				let flightIds = [];
+
+				for (var i=0; i<flights.features.length; i++) {
+					flightIds.push("flight" + i);
+				};
 
 				let projection = createProjection(map);
 				let path = createPath(projection);
